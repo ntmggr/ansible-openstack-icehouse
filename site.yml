@@ -8,4 +8,5 @@
    - common
 
 - include: controller.yml
+- include: network.yml
 - include: compute-node.yml

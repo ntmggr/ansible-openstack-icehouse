@@ -1,6 +1,8 @@
 [controllers]
-controller.domain.com	ansible_ssh_user=root ansible_ssh_host=1.2.3.4
+controller.hashsec.com	ansible_ssh_user=nikos ansible_ssh_host=hash1
 
 [compute-nodes]
-compute1.domain.com	ansible_ssh_user=root
-compute2.domain.com	ansible_ssh_user=root
+compute1.hashsec.com	ansible_ssh_user=nikos ansible_ssh_host=hash2
+
+[network-nodes]
+network1.hashsec.com    ansible_ssh_user=nikos ansible_ssh_host=hash3

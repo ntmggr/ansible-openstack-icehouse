@@ -1,0 +1,6 @@
+---
+# file: network.yml
+- hosts: network-nodes
+  roles:
+    - neutron
+    - neutron-network

@@ -8,8 +8,10 @@
   yum: pkg={{item}} state=installed
   with_items:
    - yum-plugin-priorities
-   - http://repos.fedorapeople.org/repos/openstack/openstack-icehouse/rdo-release-icehouse-4.noarch.rpm
-   - http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+#   - http://repos.fedorapeople.org/repos/openstack/openstack-icehouse/rdo-release-icehouse-4.noarch.rpm
+   - http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+#   - http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+   - http://rdo.fedorapeople.org/openstack-kilo/rdo-release-kilo.rpm
    - openstack-utils
    - openstack-selinux
 

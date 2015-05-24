@@ -57,3 +57,6 @@ ENVIRONMENT:
   OS_PASSWORD: "{{ ADMIN_PASS }}"
   OS_TENANT_NAME: admin
   OS_AUTH_URL: http://{{ CONTROLLER }}:35357/v2.0
+
+RABBIT_USER: openstack
+RABBIT_PASS: rabbitopenstack

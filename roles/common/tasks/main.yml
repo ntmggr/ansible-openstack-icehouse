@@ -42,8 +42,8 @@
 - name: install database on controller
   yum: pkg={{ item }} state=installed
   with_items:
-   - mysql
-   - mysql-server
+   - mariadb
+   - mariadb-server
    - MySQL-python
   when: ansible_hostname == "controller"
 
@@ -51,25 +51,25 @@
   yum: pkg={{item}} state=installed
   with_items:
    - yum-plugin-priorities
-   - http://repos.fedorapeople.org/repos/openstack/openstack-icehouse/rdo-release-icehouse-4.noarch.rpm
-   - http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+   - http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+   - http://rdo.fedorapeople.org/openstack-kilo/rdo-release-kilo.rpm
    - openstack-utils
    - openstack-selinux
 
-- name: update /etc/my.cnf
+- name: create /etc/my.cnf.d/mariadb_openstack.cnf
   shell: "{{ item }}"
   with_items:
-   - crudini --set /etc/my.cnf mysqld default-storage-engine innodb
-   - crudini --set /etc/my.cnf mysqld innodb_file_per_table true
-   - crudini --set /etc/my.cnf mysqld collation-server utf8_general_ci
-   - crudini --set /etc/my.cnf mysqld init-connect 'SET NAMES utf8'
-   - crudini --set /etc/my.cnf mysqld character-set-server utf8
+   - crudini --set /etc/my.cnf.d/mariadb_openstack.cnf mysqld default-storage-engine innodb
+   - crudini --set /etc/my.cnf.d/mariadb_openstack.cnf mysqld innodb_file_per_table true
+   - crudini --set /etc/my.cnf.d/mariadb_openstack.cnf mysqld collation-server utf8_general_ci
+   - crudini --set /etc/my.cnf.d/mariadb_openstack.cnf mysqld init-connect 'SET NAMES utf8'
+   - crudini --set /etc/my.cnf.d/mariadb_openstack.cnf mysqld character-set-server utf8
   when: ansible_hostname == "controller"
   notify:
-     - restart mysqld
+     - restart mariadb
 
 - name: enable database
-  service: enabled=yes name=mysqld state=started
+  service: enabled=yes name=mariadb state=started
   when: ansible_hostname == "controller"
 
 - name: mysql db install
@@ -94,15 +94,19 @@
   register: updated
 
 - name: install message queue
-  yum: name=qpid-cpp-server state=present
+  yum: name=rabbitmq-server state=present
   when: ansible_hostname == "controller"
 
-- name: config qpid
-  command: sed -i 's/auth=yes/auth=no/g' /etc/qpidd.conf
+- name: rabbitmq add user
+  command: rabbitmqctl add_user {{ RABBIT_USER }} {{ RABBIT_PASS }}
   when: ansible_hostname == "controller"
 
-- name: enable qpid
-  service: enabled=yes name=qpidd state=started
+- name: rabbitmq Permit configuration, write, and read access for the openstack user
+  command: rabbitmqctl set_permissions {{ RABBIT_USER }} ".*" ".*" ".*"
+  when: ansible_hostname == "controller"
+
+- name: enable rabbitmq
+  service: enabled=yes name=rabbitmq-server state=started
   when: ansible_hostname == "controller"
 
 - name: install packages for namespaces support
