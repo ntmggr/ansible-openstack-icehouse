@@ -1,9 +1,9 @@
-ansible-openstack-icehouse
+ansible-openstack-kilo
 ==========================
 
-Ansible playbooks to install OpenStack Icehouse RDO for CentOS
+Ansible playbooks to install OpenStack KilKilo RDO for CentOS
 
-http://docs.openstack.org/icehouse/install-guide/install/yum/content/index.html
+http://docs.openstack.org/kilo/install-guide/install/yum/content/
 
 Steps to deploy
 ---------------
